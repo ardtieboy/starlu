@@ -17,8 +17,8 @@ package cmd
 
 import (
 	"errors"
-	"fmt"
 
+	"github.com/ardtieboy/starlu/imageprocessing"
 	"github.com/spf13/cobra"
 )
 
@@ -33,13 +33,22 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Args: func(cmd *cobra.Command, args []string) error {
-		if len(args) != 1 {
+		if len(args) < 1 {
 			return errors.New("requires a color argument")
 		}
 		return nil
 	},
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("teaser called")
+	RunE: func(cmd *cobra.Command, args []string) error {
+		println("Creating teaser image(s) now")
+		for _, s := range args {
+			println("Processing " + s + " now...")
+			output, err := imageprocessing.Crop(s)
+			if err != nil {
+				return err
+			}
+			println("Created: " + output)
+		}
+		return nil
 	},
 }
 

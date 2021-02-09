@@ -47,22 +47,22 @@ func Crop(originalImagePath string) (string, error) {
 	if format == "jpg" || format == "jpeg" {
 		sourceImage, err = jpeg.Decode(sourceFile)
 		if err != nil {
-			return "error", errors.New("Could not decode the image")
+			return "error", errors.New("Could not decode the image " + originalImagePath)
 		}
 	} else if format == "png" {
 		sourceImage, err = png.Decode(sourceFile)
 		if err != nil {
-			return "error", errors.New("Could not decode the image")
+			return "error", errors.New("Could not decode the image " + originalImagePath)
 		}
 	} else {
-		return "error", errors.New("Only jpeg and png images are supported")
+		return "error", errors.New("Only jpeg and png images are supported " + originalImagePath)
 	}
 
 	maxX := sourceImage.Bounds().Max.X
 	maxY := sourceImage.Bounds().Max.Y
 
 	if maxX < 1200 || maxY < 675 {
-		return "error", errors.New("Image too small")
+		return "error", errors.New("Image too small: " + originalImagePath)
 	}
 
 	xRatio := float64(maxX) / 1200
@@ -76,7 +76,7 @@ func Crop(originalImagePath string) (string, error) {
 	cropableImage, ok := sourceImage.(SubImager)
 
 	if ok != true {
-		return "error", errors.New("Not a SubImage interface")
+		return "error", errors.New("Not a SubImage interface: " + originalImagePath)
 	}
 
 	marginX := (maxX - rectX) / 2.0
@@ -89,7 +89,7 @@ func Crop(originalImagePath string) (string, error) {
 	lowerBorder := image.Rect(0+marginX, (rectY-borderwidth)+marginY, rectX+marginX, rectY+marginY)
 	leftBorder := image.Rect(0+marginX, 0+marginY, borderwidth+marginX, rectY+marginY)
 	rightBorder := image.Rect((rectX+marginX)-borderwidth, 0+marginY, rectX+marginX, rectY+marginY)
-	colorRed := color.RGBA{200, 0, 0, 255}
+	colorRed := color.RGBA{192, 51, 29, 255}
 
 	croppedImageBoundsInOriginalAxis := croppedImage.Bounds()
 	drawableCropped := image.NewRGBA(croppedImageBoundsInOriginalAxis)

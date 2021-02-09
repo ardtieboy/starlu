@@ -25,28 +25,23 @@ import (
 // teaserCmd represents the teaser command
 var teaserCmd = &cobra.Command{
 	Use:   "teaser image_path",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Crops, resizes and puts border on provided image in order to create a teaser",
+	Long:  "Crops, resizes and puts border on provided image in order to create a teaser",
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
-			return errors.New("requires a color argument")
+			return errors.New("Requires one or more filenames")
 		}
 		return nil
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
-		println("Creating teaser image(s) now")
+		println("Starting now... ☕️")
 		for _, s := range args {
-			println("Processing " + s + " now...")
+			// println("Processing " + s + " now...")
 			output, err := imageprocessing.Crop(s)
 			if err != nil {
 				return err
 			}
-			println("Created: " + output)
+			println("➡️ " + output)
 		}
 		return nil
 	},

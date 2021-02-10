@@ -26,9 +26,10 @@ var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "starlu",
-	Short: "Starlu is a CLI tool for supporting common tasks for pragalicious editors",
-	Long:  "Starlu is a CLI tool for supporting common tasks for pragalicious editors",
+	Version: "1.0.0",
+	Use:     "starlu",
+	Short:   "Starlu is a CLI tool for supporting common tasks for pragalicious editors",
+	Long:    "Starlu is a CLI tool for supporting common tasks for pragalicious editors",
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.

@@ -5,6 +5,8 @@ import (
 	"math"
 	"strings"
 
+	"github.com/nfnt/resize"
+
 	"image"
 	"image/color"
 	"image/draw"
@@ -82,13 +84,15 @@ func Crop(originalImagePath string) (string, error) {
 	marginX := (maxX - rectX) / 2.0
 	marginY := (maxY - rectY) / 2.0
 
-	croppedImage := cropableImage.SubImage(image.Rect(marginX, marginY, marginX+int(rectX), marginY+int(rectY)))
+	croppedFullSizeImage := cropableImage.SubImage(image.Rect(marginX, marginY, marginX+int(rectX), marginY+int(rectY)))
+	croppedImage := resize.Resize(1200, 675, croppedFullSizeImage, resize.Lanczos3)
 
-	borderwidth := int(24 * smallestRatio)
-	topBorder := image.Rect(0+marginX, 0+marginY, rectX+marginX, borderwidth+marginY)
-	lowerBorder := image.Rect(0+marginX, (rectY-borderwidth)+marginY, rectX+marginX, rectY+marginY)
-	leftBorder := image.Rect(0+marginX, 0+marginY, borderwidth+marginX, rectY+marginY)
-	rightBorder := image.Rect((rectX+marginX)-borderwidth, 0+marginY, rectX+marginX, rectY+marginY)
+	borderwidth := int(23)
+
+	topBorder := image.Rect(0, 0, 1200, borderwidth)
+	lowerBorder := image.Rect(0, 675-borderwidth, 1200, 675)
+	leftBorder := image.Rect(0, 0, borderwidth, 675)
+	rightBorder := image.Rect(1200-borderwidth, 0, 1200, 675)
 	colorRed := color.RGBA{192, 51, 29, 255}
 
 	croppedImageBoundsInOriginalAxis := croppedImage.Bounds()

@@ -85,7 +85,7 @@ func Crop(originalImagePath string) (string, error) {
 	marginY := (maxY - rectY) / 2.0
 
 	croppedFullSizeImage := cropableImage.SubImage(image.Rect(marginX, marginY, marginX+int(rectX), marginY+int(rectY)))
-	croppedImage := resize.Resize(1200, 675, croppedFullSizeImage, resize.Lanczos3)
+	croppedImage := resize.Thumbnail(1200, 675, croppedFullSizeImage, resize.Lanczos3)
 
 	borderwidth := int(23)
 

@@ -89,22 +89,23 @@ func Crop(originalImagePath string) (string, error) {
 
 	borderwidth := int(23)
 
-	topBorder := image.Rect(0, 0, 1200, borderwidth)
-	lowerBorder := image.Rect(0, 675-borderwidth, 1200, 675)
-	leftBorder := image.Rect(0, 0, borderwidth, 675)
-	rightBorder := image.Rect(1200-borderwidth, 0, 1200, 675)
-	colorRed := color.RGBA{192, 51, 29, 255}
-
 	croppedImageBoundsInOriginalAxis := croppedImage.Bounds()
 	drawableCropped := image.NewRGBA(croppedImageBoundsInOriginalAxis)
 	// Note that there is a offset needed because the cropped image is still in the original image coordinate system
 	// We need to create a new image which is drawable in order to draw borders on them
 	draw.Draw(drawableCropped, croppedImageBoundsInOriginalAxis, croppedImage, croppedImageBoundsInOriginalAxis.Min, draw.Src)
 
-	draw.Draw(drawableCropped, topBorder, &image.Uniform{colorRed}, image.ZP, draw.Src)
-	draw.Draw(drawableCropped, lowerBorder, &image.Uniform{colorRed}, image.ZP, draw.Src)
-	draw.Draw(drawableCropped, leftBorder, &image.Uniform{colorRed}, image.ZP, draw.Src)
-	draw.Draw(drawableCropped, rightBorder, &image.Uniform{colorRed}, image.ZP, draw.Src)
+	// Shift the rectangles in the case the croppedImageBoundsInOriginalAxis.Min doesn't match (0, 0)
+	topBorder := image.Rect(0, 0, 1200, borderwidth)
+	lowerBorder := image.Rect(0, 675-borderwidth, 1200, 675)
+	leftBorder := image.Rect(0, 0, borderwidth, 675)
+	rightBorder := image.Rect(1200-borderwidth, 0, 1200, 675)
+	colorRed := color.RGBA{192, 51, 29, 255}
+
+	draw.Draw(drawableCropped, topBorder.Add(croppedImageBoundsInOriginalAxis.Min), &image.Uniform{colorRed}, croppedImageBoundsInOriginalAxis.Min, draw.Src)
+	draw.Draw(drawableCropped, lowerBorder.Add(croppedImageBoundsInOriginalAxis.Min), &image.Uniform{colorRed}, croppedImageBoundsInOriginalAxis.Min, draw.Src)
+	draw.Draw(drawableCropped, leftBorder.Add(croppedImageBoundsInOriginalAxis.Min), &image.Uniform{colorRed}, croppedImageBoundsInOriginalAxis.Min, draw.Src)
+	draw.Draw(drawableCropped, rightBorder.Add(croppedImageBoundsInOriginalAxis.Min), &image.Uniform{colorRed}, croppedImageBoundsInOriginalAxis.Min, draw.Src)
 
 	// Save cropped image
 	outputImageName := basicFilename + "_pragafied." + format

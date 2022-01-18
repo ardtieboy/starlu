@@ -19,3 +19,10 @@ func TestImageToSmoll(t *testing.T) {
 		t.Error()
 	}
 }
+
+func TestWeirdRatio(t *testing.T) {
+	_, err := Crop("weird_img.jpeg")
+	if err != nil {
+		t.Error()
+	}
+}
